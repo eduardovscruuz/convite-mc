@@ -1082,7 +1082,7 @@ export default function App() {
                 ${" "}
               </span>
               <TypedText
-                text="sim... eu fiz site."
+                text="sim... eu fiz um site"
                 active={introDone}
                 onDone={() => setLine1Done(true)}
               />
@@ -1119,7 +1119,7 @@ export default function App() {
                   Sim
                 </button>
                 <button
-                  onClick={() => setChosenOpening("Sim, obviamente")}
+                  onClick={() => setChosenOpening("Sim, obviamente!")}
                   className={RIGHT_ANSWER_BUTTON_CLASS}
                 >
                   Sim, obviamente!
