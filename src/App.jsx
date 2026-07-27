@@ -728,7 +728,7 @@ function LogisticsScreen({ answers, setAnswers, onDone }) {
             onChange={(e) =>
               setAnswers((a) => ({ ...a, date: e.target.value }))
             }
-            className="w-full rounded-md border border-neutral-700 bg-neutral-800 px-4 py-3 font-mono text-sm text-neutral-100 [color-scheme:dark]"
+            className="h-12 w-full appearance-none rounded-md border border-neutral-700 bg-neutral-800 px-4 font-mono text-base text-neutral-100 [color-scheme:dark]"
           />
 
           {dateChosen && (
