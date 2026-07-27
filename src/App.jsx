@@ -664,7 +664,7 @@ function LogisticsScreen({ answers, setAnswers, onDone }) {
           ${" "}
         </span>
         <TypedText
-          text="Como você me falou que está viajando e não sabe ao certo qual dia volta, vou deixar livre pra você escolher a data e o horário — ou a gente pode simplesmente combinar depois, sem pressão."
+          text="Como você me falou que tá viajando e não sabe ao certo qual dia volta, vou deixar livre pra você escolher a data e o horário (ou a gente pode simplesmente combinar depois, sem pressa, apesar de eu ser ansioso)."
           active={introDone}
           onDone={() => setLineDone(true)}
         />
