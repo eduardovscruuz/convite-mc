@@ -575,9 +575,9 @@ function QuizFinalScreen({ allCorrect, onDone }) {
           ${" "}
         </span>
         <TypedText
-          text={`Hihihi ora ora… parece que alguém me descreveu ${
+          text={`Ora ora ora… parece que alguém me descreveu ${
             allCorrect ? "" : "(quase) "
-          }por completo, que coincidência.`}
+          }por completo, que coincidência hihi`}
           active={introDone}
           onDone={() => setLineDone(true)}
         />
