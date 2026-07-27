@@ -64,7 +64,7 @@ const QUIZ_QUESTIONS = [
       {
         label: "tem que mais na dele",
         gif: "/quiz-mais-de-boa.gif",
-        joke: 'Tá, mas "mais na dele" e "pouco emocionado" são bem diferentes, viu? Só reforçando.',
+        joke: "Ah... ainda bem que eu não sou desse tipinho aí.",
       },
       {
         label: "pode ser um pouco emocionado",
@@ -78,14 +78,14 @@ const QUIZ_QUESTIONS = [
     question: "Quando um cara tá com uma mulher, ele tem que ser",
     options: [
       {
-        label: "mais na dele",
+        label: "normal",
         gif: "/quiz-na-dele.gif",
         joke: "Hm, tudo bem... acho que não é toda mulher que gosta de ter um fã",
       },
       {
         label: "completamente obcecado por ela",
         gif: "/quiz-obcecado.gif",
-        joke: "Concordo.. homem que não tem uma mulher pra idolatrar é só menino",
+        joke: "Concordo.. homem que não tem uma mulher pra idolatrar é só um menino",
       },
     ],
   },
