@@ -59,17 +59,17 @@ const QUIZ_QUESTIONS = [
   },
   {
     key: "manInterest",
-    question: "Em questão de demonstrar interesse, ele pode ser:",
+    question: "Em questão de assim.. de demonstrar interesse, ele:",
     options: [
       {
-        label: "mais na dele",
+        label: "tem que mais na dele",
         gif: "/quiz-mais-de-boa.gif",
         joke: 'Tá, mas "mais na dele" e "pouco emocionado" são bem diferentes, viu? Só reforçando.',
       },
       {
-        label: "pouco emocionado",
+        label: "pode ser um pouco emocionado",
         gif: "/quiz-pouco-emocionado.gif",
-        joke: "Anotado. (Emocionado, mas não sem noção.)",
+        joke: "Anotado. (Emocionado, mas não sem noção)",
       },
     ],
   },
@@ -80,12 +80,12 @@ const QUIZ_QUESTIONS = [
       {
         label: "mais na dele",
         gif: "/quiz-na-dele.gif",
-        joke: "Hm, tudo bem... acho que não é toda mulher que gosta de ter um fã.",
+        joke: "Hm, tudo bem... acho que não é toda mulher que gosta de ter um fã",
       },
       {
         label: "completamente obcecado por ela",
         gif: "/quiz-obcecado.gif",
-        joke: "Concordo. Homem que não tem uma mulher pra idolatrar é só menino.",
+        joke: "Concordo.. homem que não tem uma mulher pra idolatrar é só menino",
       },
     ],
   },
@@ -176,6 +176,42 @@ function TerminalWindow({ title, children }) {
       <div className="p-8 font-mono text-sm text-neutral-100 sm:p-10 sm:text-base">
         {children}
       </div>
+    </div>
+  );
+}
+
+// Só troca o skeleton pela imagem de verdade quando o onLoad confirma que ela
+// já está pronta (nunca antes) — assim o container nunca fica sem tamanho
+// nenhum no meio do caminho, o que fazia a janela encolher e "pular" depois.
+function GifBox({ src, alt, className = "" }) {
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
+
+  // reseta quando o src muda (ex.: "Mudar a resposta" trocando de GIF) —
+  // sem isso, o box continuaria mostrando o GIF antigo até o novo carregar
+  useEffect(() => {
+    setLoaded(false);
+    setError(false);
+  }, [src]);
+
+  return (
+    <div
+      className={`w-full overflow-hidden rounded-lg border border-neutral-800 bg-neutral-800 ${className}`}
+    >
+      {src && !error && (
+        <img
+          src={src}
+          alt={alt}
+          onLoad={() => setLoaded(true)}
+          onError={() => setError(true)}
+          className={`w-full object-contain ${
+            loaded ? "block animate-fadeIn" : "hidden"
+          }`}
+        />
+      )}
+      {(!src || !loaded || error) && (
+        <div className="aspect-video w-full animate-pulse bg-neutral-800" />
+      )}
     </div>
   );
 }
@@ -407,7 +443,6 @@ function QuizQuestionScreen({ questionData, showIntro, onAnswered }) {
   const [questionLineDone, setQuestionLineDone] = useState(false);
   const buttonsReady = useAfterDelay(questionLineDone, 500);
   const [answer, setAnswer] = useState(null);
-  const [imgError, setImgError] = useState(false);
   const [continueReady, setContinueReady] = useState(false);
 
   useEffect(() => {
@@ -463,18 +498,7 @@ function QuizQuestionScreen({ questionData, showIntro, onAnswered }) {
         />
       </p>
 
-      <div className="mt-4 w-full overflow-hidden rounded-lg border border-neutral-800 bg-neutral-800">
-        {chosen && !imgError ? (
-          <img
-            src={chosen.gif}
-            alt={chosen.label}
-            onError={() => setImgError(true)}
-            className="w-full animate-fadeIn object-contain"
-          />
-        ) : (
-          <div className="aspect-video w-full animate-pulse bg-neutral-800" />
-        )}
-      </div>
+      <GifBox className="mt-4" src={chosen?.gif} alt={chosen?.label ?? ""} />
 
       {!answer ? (
         <div
@@ -531,7 +555,6 @@ function QuizQuestionScreen({ questionData, showIntro, onAnswered }) {
 function QuizFinalScreen({ allCorrect, onDone }) {
   const [introDone, setIntroDone] = useState(false);
   const [lineDone, setLineDone] = useState(false);
-  const [imgError, setImgError] = useState(false);
   const continueReady = useAfterDelay(lineDone, 800);
 
   useEffect(() => {
@@ -541,18 +564,7 @@ function QuizFinalScreen({ allCorrect, onDone }) {
 
   return (
     <TerminalWindow title="Convite — Maria Clara">
-      <div className="w-full overflow-hidden rounded-lg border border-neutral-800 bg-neutral-800">
-        {!imgError ? (
-          <img
-            src={QUIZ_FINAL_GIF}
-            alt="Comemorando"
-            onError={() => setImgError(true)}
-            className="w-full animate-fadeIn object-contain"
-          />
-        ) : (
-          <div className="aspect-video w-full animate-pulse bg-neutral-800" />
-        )}
-      </div>
+      <GifBox src={QUIZ_FINAL_GIF} alt="Comemorando" />
 
       <p className="mt-4">
         <span
@@ -765,22 +777,12 @@ function LogisticsScreen({ answers, setAnswers, onDone }) {
 }
 
 function JimScreen({ answers, onDone }) {
-  const [imgError, setImgError] = useState(false);
-
   return (
     <TerminalWindow title="Convite — Maria Clara">
-      <div className="w-full animate-fadeIn overflow-hidden rounded-lg border border-neutral-800 bg-neutral-800">
-        {!imgError ? (
-          <img
-            src="/jim-its-a-date.gif"
-            alt="Jim Halpert (The Office) dizendo 'Alright, then it's a date.'"
-            onError={() => setImgError(true)}
-            className="w-full object-contain"
-          />
-        ) : (
-          <div className="aspect-video w-full animate-pulse bg-neutral-800" />
-        )}
-      </div>
+      <GifBox
+        src="/jim-its-a-date.gif"
+        alt="Jim Halpert (The Office) dizendo 'Alright, then it's a date.'"
+      />
 
       <p className="mt-4 animate-fadeIn text-center text-sm text-neutral-300">
         {answers.date ? (
@@ -1182,17 +1184,11 @@ export default function App() {
             )}
 
             {gifLoading && (
-              <div className="mt-6 w-full animate-fadeIn overflow-hidden rounded-lg border border-neutral-800">
-                {line6Done ? (
-                  <img
-                    src="/date-michael.gif"
-                    alt="Date Michael, de The Office"
-                    className="w-full object-contain"
-                  />
-                ) : (
-                  <div className="aspect-video w-full animate-pulse bg-neutral-800" />
-                )}
-              </div>
+              <GifBox
+                className="mt-6"
+                src="/date-michael.gif"
+                alt="Date Michael, de The Office"
+              />
             )}
 
             {line7Ready && (
