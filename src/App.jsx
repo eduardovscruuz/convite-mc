@@ -321,7 +321,7 @@ function VerificationStep({ onDone }) {
           ${" "}
         </span>
         <TypedText
-          text="Antes da gente continuar, preciso só verificar se você não é robô e o seu nível de comprometimento com essa palhaçada."
+          text="Antes da gente continuar, preciso só verificar se você não é robô e o seu nível de comprometimento com essa palhaçada aqui."
           active={introDone}
           onDone={() => setLine1Done(true)}
         />
