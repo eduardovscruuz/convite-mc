@@ -94,6 +94,18 @@ const QUIZ_QUESTIONS = [
 // GIF de fechamento pra quando ela acertar tudo — ainda placeholder.
 const QUIZ_FINAL_GIF = "/quiz-final.gif";
 
+// Todos os GIFs do app, usados só pra pré-carregar em segundo plano assim que
+// o site abre — sem isso, cada GIF só começa a baixar no exato momento em que
+// aparece na tela, e no primeiro acesso (sem cache do navegador) isso dá uma
+// travadinha visível antes de cada um surgir.
+const ALL_GIF_URLS = [
+  "/date-michael.gif",
+  "/jim-its-a-date.gif",
+  "/stay-calm.gif",
+  QUIZ_FINAL_GIF,
+  ...QUIZ_QUESTIONS.flatMap((q) => q.options.map((o) => o.gif)),
+];
+
 const WEBHOOK_URL = "https://formspree.io/f/mbdnwjrl";
 
 function formatPhone(value) {
@@ -299,7 +311,7 @@ function VerificationStep({ onDone }) {
   const buttonVisible = clickCount === 0 ? firstButtonReady : buttonReady;
 
   return (
-    <TerminalWindow title="convite — Maria Clara">
+    <TerminalWindow title="Convite — Maria Clara">
       <p>
         <span
           className={`text-emerald-400 transition-opacity duration-300 ${
@@ -418,7 +430,7 @@ function QuizQuestionScreen({ questionData, showIntro, onAnswered }) {
   const chosen = questionData.options.find((o) => o.label === answer);
 
   return (
-    <TerminalWindow title="convite — Maria Clara">
+    <TerminalWindow title="Convite — Maria Clara">
       {showIntro && (
         <p>
           <span
@@ -528,7 +540,7 @@ function QuizFinalScreen({ allCorrect, onDone }) {
   }, []);
 
   return (
-    <TerminalWindow title="convite — Maria Clara">
+    <TerminalWindow title="Convite — Maria Clara">
       <div className="w-full overflow-hidden rounded-lg border border-neutral-800 bg-neutral-800">
         {!imgError ? (
           <img
@@ -630,7 +642,7 @@ function LogisticsScreen({ answers, setAnswers, onDone }) {
   }, []);
 
   return (
-    <TerminalWindow title="convite — Maria Clara">
+    <TerminalWindow title="Convite — Maria Clara">
       <p>
         <span
           className={`text-emerald-400 transition-opacity duration-300 ${
@@ -756,7 +768,7 @@ function JimScreen({ answers, onDone }) {
   const [imgError, setImgError] = useState(false);
 
   return (
-    <TerminalWindow title="convite — Maria Clara">
+    <TerminalWindow title="Convite — Maria Clara">
       <div className="w-full animate-fadeIn overflow-hidden rounded-lg border border-neutral-800 bg-neutral-800">
         {!imgError ? (
           <img
@@ -836,7 +848,7 @@ function SliderAndContactScreen({ answers, setAnswers, onFinished }) {
   }
 
   return (
-    <TerminalWindow title="convite — Maria Clara">
+    <TerminalWindow title="Convite — Maria Clara">
       <p>
         <span
           className={`text-emerald-400 transition-opacity duration-300 ${
@@ -1011,6 +1023,15 @@ function FinalStretchFlow({ answers, setAnswers, onFinished }) {
 }
 
 export default function App() {
+  // pré-carrega todos os GIFs em segundo plano assim que o site abre, pra eles
+  // já estarem em cache quando chegar a vez de cada um aparecer na tela
+  useEffect(() => {
+    ALL_GIF_URLS.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   const [step, setStep] = useState(1);
   const [answers, setAnswers] = useState({
     logisticsMode: "",
@@ -1051,7 +1072,7 @@ export default function App() {
     <div className="min-h-screen text-neutral-100">
       {step === 1 && (
         <div className="flex min-h-screen flex-col items-center justify-center px-4 py-12">
-          <TerminalWindow title="convite — Maria Clara">
+          <TerminalWindow title="Convite — Maria Clara">
             <p>
               <span
                 className={`text-emerald-400 transition-opacity duration-300 ${
@@ -1101,7 +1122,7 @@ export default function App() {
                   onClick={() => setChosenOpening("Sim, obviamente")}
                   className={RIGHT_ANSWER_BUTTON_CLASS}
                 >
-                  Sim, obviamente
+                  Sim, obviamente!
                 </button>
               </div>
             ) : (
@@ -1231,9 +1252,11 @@ export default function App() {
                 className="w-full rounded-xl border border-neutral-800"
               />
               <p className="mt-4 text-center text-sm text-neutral-300">
-                Resposta enviada com sucesso! (Pode fechar aqui, o garoto de
-                programa já recebeu tudo e já está providenciando os detalhes do
-                nosso encontro). Nos vemos na semana que vem!
+                Resposta enviada com sucesso!
+              </p>
+              <p className="mt-3 text-center text-sm text-neutral-300">
+                Pode fechar aqui. O garoto de programa já recebeu tudo e logo
+                mais ele entra em contato.
               </p>
             </Card>
           </Screen>
